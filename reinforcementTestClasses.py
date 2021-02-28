@@ -16,7 +16,6 @@ import testClasses
 import random, math, traceback, sys, os
 import layout, textDisplay, pacman, gridworld
 import time
-from functools import reduce
 from util import Counter, TimeoutFunction, FixedRandom
 from collections import defaultdict
 from pprint import PrettyPrinter
@@ -39,7 +38,7 @@ class ValueIterationTest(testClasses.TestCase):
         if 'noise' in testDict: self.grid.setNoise(float(testDict['noise']))
         if 'livingReward' in testDict: self.grid.setLivingReward(float(testDict['livingReward']))
         maxPreIterations = 10
-        self.numsIterationsForDisplay = list(range(min(iterations, maxPreIterations)))
+        self.numsIterationsForDisplay = range(min(iterations, maxPreIterations))
         self.testOutFile = testDict['test_out_file']
         if maxPreIterations < iterations:
             self.numsIterationsForDisplay.append(iterations)
@@ -123,7 +122,7 @@ class ValueIterationTest(testClasses.TestCase):
     def runAgent(self, moduleDict, numIterations):
         agent = moduleDict['valueIterationAgents'].ValueIterationAgent(self.grid, discount=self.discount, iterations=numIterations)
         states = self.grid.getStates()
-        actions = list(reduce(lambda a, b: set(a).union(b), [self.grid.getPossibleActions(state) for state in states], set()))
+        actions = list(reduce(lambda a, b: set(a).union(b), [self.grid.getPossibleActions(state) for state in states]))
         values = {}
         qValues = {}
         policy = {}
@@ -132,7 +131,7 @@ class ValueIterationTest(testClasses.TestCase):
             policy[state] = agent.computeActionFromValues(state)
             possibleActions = self.grid.getPossibleActions(state)
             for action in actions:
-                if not action in qValues:
+                if not qValues.has_key(action):
                     qValues[action] = {}
                 if action in possibleActions:
                     qValues[action][state] = agent.computeQValueFromValues(state, action)
@@ -214,7 +213,7 @@ class ApproximateQLearningTest(testClasses.TestCase):
         self.opts = {'actionFn': self.env.getPossibleActions, 'epsilon': self.epsilon, 'gamma': self.discount, 'alpha': self.learningRate}
         numExperiences = int(testDict['numExperiences'])
         maxPreExperiences = 10
-        self.numsExperiencesForDisplay = list(range(min(numExperiences, maxPreExperiences)))
+        self.numsExperiencesForDisplay = range(min(numExperiences, maxPreExperiences))
         self.testOutFile = testDict['test_out_file']
         if maxPreExperiences < numExperiences:
             self.numsExperiencesForDisplay.append(numExperiences)
@@ -279,25 +278,25 @@ class ApproximateQLearningTest(testClasses.TestCase):
 
     def runAgent(self, moduleDict, numExperiences):
         agent = moduleDict['qlearningAgents'].ApproximateQAgent(extractor=self.extractor, **self.opts)
-        states = [state for state in self.grid.getStates() if len(self.grid.getPossibleActions(state)) > 0]
-        sorted(states)
+        states = filter(lambda state : len(self.grid.getPossibleActions(state)) > 0, self.grid.getStates())
+        states.sort()
         randObj = FixedRandom().random
         # choose a random start state and a random possible action from that state
         # get the next state and reward from the transition function
         lastExperience = None
-        for _ in range(numExperiences):
+        for i in range(numExperiences):
             startState = randObj.choice(states)
             action = randObj.choice(self.grid.getPossibleActions(startState))
             (endState, reward) = self.env.getRandomNextState(startState, action, randObj=randObj)
             lastExperience = (startState, action, endState, reward)
             agent.update(*lastExperience)
-        actions = list(reduce(lambda a, b: set(a).union(b), [self.grid.getPossibleActions(state) for state in states], set()))
+        actions = list(reduce(lambda a, b: set(a).union(b), [self.grid.getPossibleActions(state) for state in states]))
         qValues = {}
         weights = agent.getWeights()
         for state in states:
             possibleActions = self.grid.getPossibleActions(state)
             for action in actions:
-                if not action in qValues:
+                if not qValues.has_key(action):
                     qValues[action] = {}
                 if action in possibleActions:
                     qValues[action][state] = agent.getQValue(state, action)
@@ -374,7 +373,7 @@ class QLearningTest(testClasses.TestCase):
         self.opts = {'actionFn': self.env.getPossibleActions, 'epsilon': self.epsilon, 'gamma': self.discount, 'alpha': self.learningRate}
         numExperiences = int(testDict['numExperiences'])
         maxPreExperiences = 10
-        self.numsExperiencesForDisplay = list(range(min(numExperiences, maxPreExperiences)))
+        self.numsExperiencesForDisplay = range(min(numExperiences, maxPreExperiences))
         self.testOutFile = testDict['test_out_file']
         if maxPreExperiences < numExperiences:
             self.numsExperiencesForDisplay.append(numExperiences)
@@ -454,19 +453,19 @@ class QLearningTest(testClasses.TestCase):
 
     def runAgent(self, moduleDict, numExperiences):
         agent = moduleDict['qlearningAgents'].QLearningAgent(**self.opts)
-        states = list([state for state in self.grid.getStates() if len(self.grid.getPossibleActions(state)) > 0])
-        sorted(states)
+        states = filter(lambda state : len(self.grid.getPossibleActions(state)) > 0, self.grid.getStates())
+        states.sort()
         randObj = FixedRandom().random
         # choose a random start state and a random possible action from that state
         # get the next state and reward from the transition function
         lastExperience = None
-        for _ in range(numExperiences):
+        for i in range(numExperiences):
             startState = randObj.choice(states)
             action = randObj.choice(self.grid.getPossibleActions(startState))
             (endState, reward) = self.env.getRandomNextState(startState, action, randObj=randObj)
             lastExperience = (startState, action, endState, reward)
             agent.update(*lastExperience)
-        actions = list(reduce(lambda a, b: set(a).union(b), [self.grid.getPossibleActions(state) for state in states], set()))
+        actions = list(reduce(lambda a, b: set(a).union(b), [self.grid.getPossibleActions(state) for state in states]))
         values = {}
         qValues = {}
         policy = {}
@@ -475,7 +474,7 @@ class QLearningTest(testClasses.TestCase):
             policy[state] = agent.computeActionFromQValues(state)
             possibleActions = self.grid.getPossibleActions(state)
             for action in actions:
-                if not action in qValues:
+                if not qValues.has_key(action):
                     qValues[action] = {}
                 if action in possibleActions:
                     qValues[action][state] = agent.getQValue(state, action)
@@ -496,7 +495,7 @@ class QLearningTest(testClasses.TestCase):
             row = []
             for x in range(self.grid.grid.width):
                 if (x, y) in states:
-                    value = elements.get((x, y), None)
+                    value = elements[(x, y)]
                     if value is None:
                         row.append('   illegal')
                     else:
@@ -570,12 +569,12 @@ class EpsilonGreedyTest(testClasses.TestCase):
 
     def runAgent(self, moduleDict):
         agent = moduleDict['qlearningAgents'].QLearningAgent(**self.opts)
-        states = list([state for state in self.grid.getStates() if len(self.grid.getPossibleActions(state)) > 0])
-        sorted(states)
+        states = filter(lambda state : len(self.grid.getPossibleActions(state)) > 0, self.grid.getStates())
+        states.sort()
         randObj = FixedRandom().random
         # choose a random start state and a random possible action from that state
         # get the next state and reward from the transition function
-        for _ in range(self.numExperiences):
+        for i in range(self.numExperiences):
             startState = randObj.choice(states)
             action = randObj.choice(self.grid.getPossibleActions(startState))
             (endState, reward) = self.env.getRandomNextState(startState, action, randObj=randObj)
@@ -590,7 +589,7 @@ class EpsilonGreedyTest(testClasses.TestCase):
                 continue
             numGreedyChoices = 0
             optimalAction = agent.computeActionFromQValues(state)
-            for _ in range(self.numIterations):
+            for iteration in range(self.numIterations):
                 # assume that their computeActionFromQValues implementation is correct (q4 tests this)
                 if agent.getAction(state) == optimalAction:
                     numGreedyChoices += 1
@@ -729,7 +728,7 @@ class EvalAgentTest(testClasses.TestCase):
 def followPath(policy, start, numSteps=100):
     state = start
     path = []
-    for _ in range(numSteps):
+    for i in range(numSteps):
         if state not in policy:
             break
         action = policy[state]

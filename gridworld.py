@@ -167,7 +167,7 @@ class Gridworld(mdp.MarkovDecisionProcess):
         for state, prob in statesAndProbs:
             counter[state] += prob
         newStatesAndProbs = []
-        for state, prob in list(counter.items()):
+        for state, prob in counter.items():
             newStatesAndProbs.append((state, prob))
         return newStatesAndProbs
 
@@ -311,16 +311,6 @@ def getMazeGrid():
             ['S',' ',' ',' ']]
     return Gridworld(grid)
 
-def getVerticalBridgeGrid():
-    grid = [['#', 10, '#'],
-            [-100, ' ', -100],
-            [-100, ' ', -100],
-            [-100, ' ', -100],
-            [-100, ' ', -100],
-            [-100, 'S', -100],
-            ['#',  1, '#']]
-    return Gridworld(grid)
-
 
 
 def getUserAction(state, actionFunction):
@@ -345,7 +335,7 @@ def getUserAction(state, actionFunction):
         action = actions[0]
     return action
 
-def printString(x): print(x)
+def printString(x): print x
 
 def runEpisode(agent, environment, discount, decision, display, message, pause, episode):
     returns = 0
@@ -358,12 +348,12 @@ def runEpisode(agent, environment, discount, decision, display, message, pause, 
         # DISPLAY CURRENT STATE
         state = environment.getCurrentState()
         display(state)
+        pause()
 
         # END IF IN A TERMINAL STATE
         actions = environment.getPossibleActions(state)
         if len(actions) == 0:
             message("EPISODE "+str(episode)+" COMPLETE: RETURN WAS "+str(returns)+"\n")
-            pause()
             return returns
 
         # GET ACTION (USUALLY FROM AGENT)
@@ -413,7 +403,7 @@ def parseOptions():
                          metavar="K", help='Number of epsiodes of the MDP to run (default %default)')
     optParser.add_option('-g', '--grid',action='store',
                          metavar="G", type='string',dest='grid',default="BookGrid",
-                         help='Grid to use (case sensitive; options are BookGrid, BridgeGrid, CliffGrid, MazeGrid, VerticalBridgeGrid, default %default)' )
+                         help='Grid to use (case sensitive; options are BookGrid, BridgeGrid, CliffGrid, MazeGrid, default %default)' )
     optParser.add_option('-w', '--windowSize', metavar="X", type='int',dest='gridSize',default=150,
                          help='Request a window width of X pixels *per grid cell* (default %default)')
     optParser.add_option('-a', '--agent',action='store', metavar="A",
@@ -440,7 +430,7 @@ def parseOptions():
     opts, args = optParser.parse_args()
 
     if opts.manual and opts.agent != 'q':
-        print('## Disabling Agents in Manual Mode (-m) ##')
+        print '## Disabling Agents in Manual Mode (-m) ##'
         opts.agent = None
 
     # MANAGE CONFLICTS
@@ -455,16 +445,13 @@ def parseOptions():
     return opts
 
 
-def main(myargs):
-    sys.argv = myargs.split()
+if __name__ == '__main__':
+
     opts = parseOptions()
 
     ###########################
     # GET THE GRIDWORLD
     ###########################
-
-    if opts.grid == 'VerticalBridgeGrid':
-        opts.gridSize = 120
 
     import gridworld
     mdpFunction = getattr(gridworld, "get"+opts.grid)
@@ -575,17 +562,17 @@ def main(myargs):
 
     # RUN EPISODES
     if opts.episodes > 0:
-        print()
-        print(("RUNNING", opts.episodes, "EPISODES"))
-        print()
+        print
+        print "RUNNING", opts.episodes, "EPISODES"
+        print
     returns = 0
     for episode in range(1, opts.episodes+1):
         returns += runEpisode(a, env, opts.discount, decisionCallback, displayCallback, messageCallback, pauseCallback, episode)
     if opts.episodes > 0:
-        print()
-        print(("AVERAGE RETURNS FROM START STATE: "+str((returns+0.0) / opts.episodes)))
-        print()
-        print()
+        print
+        print "AVERAGE RETURNS FROM START STATE: "+str((returns+0.0) / opts.episodes)
+        print
+        print
 
     # DISPLAY POST-LEARNING VALUES / Q-VALUES
     if opts.agent == 'q' and not opts.manual:
@@ -596,7 +583,3 @@ def main(myargs):
             display.pause()
         except KeyboardInterrupt:
             sys.exit(0)
-
-
-if __name__ == '__main__':
-    main(' '.join(sys.argv))
