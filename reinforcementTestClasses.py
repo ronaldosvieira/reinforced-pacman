@@ -279,7 +279,7 @@ class ApproximateQLearningTest(testClasses.TestCase):
 
     def runAgent(self, moduleDict, numExperiences):
         agent = moduleDict['qlearningAgents'].ApproximateQAgent(extractor=self.extractor, **self.opts)
-        states = filter(lambda state : len(self.grid.getPossibleActions(state)) > 0, self.grid.getStates())
+        states = [state for state in self.grid.getStates() if len(self.grid.getPossibleActions(state)) > 0]
         sorted(states)
         randObj = FixedRandom().random
         # choose a random start state and a random possible action from that state
@@ -454,7 +454,7 @@ class QLearningTest(testClasses.TestCase):
 
     def runAgent(self, moduleDict, numExperiences):
         agent = moduleDict['qlearningAgents'].QLearningAgent(**self.opts)
-        states = list(filter(lambda state : len(self.grid.getPossibleActions(state)) > 0, self.grid.getStates()))
+        states = list([state for state in self.grid.getStates() if len(self.grid.getPossibleActions(state)) > 0])
         sorted(states)
         randObj = FixedRandom().random
         # choose a random start state and a random possible action from that state
@@ -570,7 +570,7 @@ class EpsilonGreedyTest(testClasses.TestCase):
 
     def runAgent(self, moduleDict):
         agent = moduleDict['qlearningAgents'].QLearningAgent(**self.opts)
-        states = list(filter(lambda state : len(self.grid.getPossibleActions(state)) > 0, self.grid.getStates()))
+        states = list([state for state in self.grid.getStates() if len(self.grid.getPossibleActions(state)) > 0])
         sorted(states)
         randObj = FixedRandom().random
         # choose a random start state and a random possible action from that state

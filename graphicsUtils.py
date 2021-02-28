@@ -36,7 +36,7 @@ def formatColor(r, g, b):
     return '#%02x%02x%02x' % (int(r * 255), int(g * 255), int(b * 255))
 
 def colorToVector(color):
-    return map(lambda x: int(x, 16) / 256.0, [color[1:3], color[3:5], color[5:7]])
+    return [int(x, 16) / 256.0 for x in [color[1:3], color[3:5], color[5:7]]]
 
 if _Windows:
     _canvas_tfonts = ['times new roman', 'lucida console']
@@ -148,7 +148,7 @@ def end_graphics():
             if _root_window != None:
                 _root_window.destroy()
         except SystemExit as e:
-            print('Ending graphics raised an exception:', e)
+            print(('Ending graphics raised an exception:', e))
     finally:
         _root_window = None
         _canvas = None
@@ -296,7 +296,7 @@ def keys_pressed(d_o_e=lambda arg: _root_window.dooneevent(arg),
 
 def keys_waiting():
     global _keyswaiting
-    keys = _keyswaiting.keys()
+    keys = list(_keyswaiting.keys())
     _keyswaiting = {}
     return list(keys)
 

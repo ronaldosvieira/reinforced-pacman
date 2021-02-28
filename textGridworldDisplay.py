@@ -104,7 +104,7 @@ def prettyPrintValues(gridWorld, values, policy=None, currentState = None):
     colLabels = [str(colNum) for colNum in range(numCols)]
     colLabels.insert(0,' ')
     finalRows = [colLabels] + newRows
-    print(indent(finalRows,separateRows=True,delim='|', prefix='|',postfix='|', justify='center',hasHeader=True))
+    print((indent(finalRows,separateRows=True,delim='|', prefix='|',postfix='|', justify='center',hasHeader=True)))
 
 
 def prettyPrintNullValues(gridWorld, currentState = None):
@@ -172,7 +172,7 @@ def prettyPrintNullValues(gridWorld, currentState = None):
     colLabels = [str(colNum) for colNum in range(numCols)]
     colLabels.insert(0,' ')
     finalRows = [colLabels] + newRows
-    print(indent(finalRows,separateRows=True,delim='|', prefix='|',postfix='|', justify='center',hasHeader=True))
+    print((indent(finalRows,separateRows=True,delim='|', prefix='|',postfix='|', justify='center',hasHeader=True)))
 
 def prettyPrintQValues(gridWorld, qValues, currentState=None):
     grid = gridWorld.grid
@@ -243,7 +243,7 @@ def prettyPrintQValues(gridWorld, qValues, currentState=None):
     colLabels.insert(0,' ')
     finalRows = [colLabels] + newRows
 
-    print(indent(finalRows,separateRows=True,delim='|',prefix='|',postfix='|', justify='center',hasHeader=True))
+    print((indent(finalRows,separateRows=True,delim='|',prefix='|',postfix='|', justify='center',hasHeader=True)))
 
 def border(text):
     length = len(text)
@@ -256,7 +256,7 @@ def border(text):
 # (http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/267662)
 
 try:
-    from StringIO import StringIO ## for Python 2
+    from io import StringIO ## for Python 2
 except ImportError:
     from io import StringIO
 import operator
@@ -280,11 +280,11 @@ def indent(rows, hasHeader=False, headerChar='-', delim=' | ', justify='left',
     # closure for breaking logical rows to physical, using wrapfunc
     def rowWrapper(row):
         newRows = [wrapfunc(item).split('\n') for item in row]
-        return [[substr or '' for substr in item] for item in map(None,*newRows)]
+        return [[substr or '' for substr in item] for item in list(*newRows)]
     # break each logical row into one or more physical ones
     logicalRows = [rowWrapper(row) for row in rows]
     # columns of physical rows
-    columns = map(None,*reduce(operator.add,logicalRows))
+    columns = list(*reduce(operator.add,logicalRows))
     # get the maximum of each column by the string length of its items
     maxWidths = [max([len(str(item)) for item in column]) for column in columns]
     rowSeparator = headerChar * (len(prefix) + len(postfix) + sum(maxWidths) + \
@@ -292,14 +292,13 @@ def indent(rows, hasHeader=False, headerChar='-', delim=' | ', justify='left',
     # select the appropriate justify method
     justify = {'center':str.center, 'right':str.rjust, 'left':str.ljust}[justify.lower()]
     output=StringIO()
-    if separateRows: print >> output, rowSeparator
+    if separateRows: print(rowSeparator, file=output)
     for physicalRows in logicalRows:
         for row in physicalRows:
-            print >> output, \
-                prefix \
+            print(prefix \
                 + delim.join([justify(str(item),width) for (item,width) in zip(row,maxWidths)]) \
-                + postfix
-        if separateRows or hasHeader: print >> output, rowSeparator; hasHeader=False
+                + postfix, file=output)
+        if separateRows or hasHeader: print(rowSeparator, file=output); hasHeader=False
     return output.getvalue()
 
 import math
@@ -316,7 +315,7 @@ if __name__ == '__main__':
     import gridworld, util
 
     grid = gridworld.getCliffGrid2()
-    print(grid.getStates())
+    print((grid.getStates()))
 
     policy = dict([(state,'east') for state in grid.getStates()])
     values = util.Counter(dict([(state,1000.23) for state in grid.getStates()]))

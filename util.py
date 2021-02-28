@@ -16,7 +16,7 @@ import sys
 import inspect
 import heapq, random
 try:
-    from StringIO import StringIO ## for Python 2
+    from io import StringIO ## for Python 2
 except ImportError:
     from io import StringIO
 
@@ -277,8 +277,8 @@ class Counter(dict):
         """
         Returns the key with the highest value.
         """
-        if len(self.keys()) == 0: return None
-        all = self.items()
+        if len(list(self.keys())) == 0: return None
+        all = list(self.items())
         values = [x[1] for x in all]
         maxIndex = values.index(max(values))
         return all[maxIndex][0]
@@ -295,7 +295,7 @@ class Counter(dict):
         >>> a.sortedKeys()
         ['second', 'third', 'first']
         """
-        sortedItems = self.items()
+        sortedItems = list(self.items())
         compare = lambda x, y:  sign(y[1] - x[1])
         sortedItems.sort(cmp=compare)
         return [x[0] for x in sortedItems]
@@ -315,7 +315,7 @@ class Counter(dict):
         """
         total = float(self.totalCount())
         if total == 0: return
-        for key in self.keys():
+        for key in list(self.keys()):
             self[key] = self[key] / total
 
     def divideAll(self, divisor):
@@ -373,7 +373,7 @@ class Counter(dict):
         >>> a['first']
         1
         """
-        for key, value in y.items():
+        for key, value in list(y.items()):
             self[key] += value
 
     def __add__( self, y ):
@@ -433,7 +433,7 @@ def raiseNotDefined():
     line = inspect.stack()[1][2]
     method = inspect.stack()[1][3]
 
-    print("*** Method not implemented: %s at line %s of %s" % (method, line, fileName))
+    print(("*** Method not implemented: %s at line %s of %s" % (method, line, fileName)))
     sys.exit(1)
 
 def normalize(vectorOrCounter):
@@ -445,7 +445,7 @@ def normalize(vectorOrCounter):
         counter = vectorOrCounter
         total = float(counter.totalCount())
         if total == 0: return counter
-        for key in counter.keys():
+        for key in list(counter.keys()):
             value = counter[key]
             normalizedCounter[key] = value / total
         return normalizedCounter
@@ -566,9 +566,9 @@ def lookup(name, namespace):
         module = __import__(moduleName)
         return getattr(module, objName)
     else:
-        modules = [obj for obj in namespace.values() if str(type(obj)) == "<type 'module'>"]
+        modules = [obj for obj in list(namespace.values()) if str(type(obj)) == "<type 'module'>"]
         options = [getattr(module, name) for module in modules if name in dir(module)]
-        options += [obj[1] for obj in namespace.items() if obj[0] == name ]
+        options += [obj[1] for obj in list(namespace.items()) if obj[0] == name ]
         if len(options) == 1: return options[0]
         if len(options) > 1: raise Exception('Name conflict for %s' % name)
         raise Exception('%s not found as a method or class' % name)
@@ -578,7 +578,7 @@ def pause():
     Pauses the output stream awaiting user feedback.
     """
     print("<Press enter/return to continue>")
-    input()
+    eval(input())
 
 
 # code to handle timeouts

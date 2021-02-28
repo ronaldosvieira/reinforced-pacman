@@ -167,7 +167,7 @@ class Gridworld(mdp.MarkovDecisionProcess):
         for state, prob in statesAndProbs:
             counter[state] += prob
         newStatesAndProbs = []
-        for state, prob in counter.items():
+        for state, prob in list(counter.items()):
             newStatesAndProbs.append((state, prob))
         return newStatesAndProbs
 
@@ -576,14 +576,14 @@ def main(myargs):
     # RUN EPISODES
     if opts.episodes > 0:
         print()
-        print("RUNNING", opts.episodes, "EPISODES")
+        print(("RUNNING", opts.episodes, "EPISODES"))
         print()
     returns = 0
     for episode in range(1, opts.episodes+1):
         returns += runEpisode(a, env, opts.discount, decisionCallback, displayCallback, messageCallback, pauseCallback, episode)
     if opts.episodes > 0:
         print()
-        print("AVERAGE RETURNS FROM START STATE: "+str((returns+0.0) / opts.episodes))
+        print(("AVERAGE RETURNS FROM START STATE: "+str((returns+0.0) / opts.episodes)))
         print()
         print()
 
