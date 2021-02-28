@@ -590,7 +590,7 @@ class EpsilonGreedyTest(testClasses.TestCase):
             numGreedyChoices = 0
             optimalAction = agent.computeActionFromQValues(state)
             for iteration in range(self.numIterations):
-                # assume that their computeActionFromQValues implementation is correct (q4 tests this)
+                # assume that their computeActionFromQValues implementation is correct (passo5 tests this)
                 if agent.getAction(state) == optimalAction:
                     numGreedyChoices += 1
             # e = epsilon, g = # greedy actions, n = numIterations, k = numLegalActions
@@ -606,7 +606,7 @@ class EpsilonGreedyTest(testClasses.TestCase):
         return True
 
 
-### q6
+### passo7
 class Question6Test(testClasses.TestCase):
 
     def __init__(self, question, testDict):
@@ -631,7 +631,7 @@ class Question6Test(testClasses.TestCase):
         return True
 
 
-### q7/q8
+### passo8/passo9
 ### =====
 ## Average wins of a pacman agent
 
@@ -721,7 +721,7 @@ class EvalAgentTest(testClasses.TestCase):
 
 
 
-### q2/q3
+### passo3/passo4
 ### =====
 ## For each parameter setting, compute the optimal policy, see if it satisfies some properties
 

@@ -145,9 +145,9 @@ def readFile(path, root=""):
 
 # TODO: use these
 ERROR_HINT_MAP = {
-  'q1': {
+  'passo2': {
     "<type 'exceptions.IndexError'>": """
-      We noticed that your project threw an IndexError on q1.
+      We noticed that your project threw an IndexError on passo2.
       While many things may cause this, it may have been from
       assuming a certain number of successors from a state space
       or assuming a certain number of actions available from a given
@@ -155,9 +155,9 @@ ERROR_HINT_MAP = {
       and submit again!
     """
   },
-  'q3': {
+  'passo4': {
       "<type 'exceptions.AttributeError'>": """
-        We noticed that your project threw an AttributeError on q3.
+        We noticed that your project threw an AttributeError on passo4.
         While many things may cause this, it may have been from assuming
         a certain size or structure to the state space. For example, if you have
         a line of code assuming that the state is (x, y) and we run your code

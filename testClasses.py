@@ -79,14 +79,14 @@ class HackedPartialCreditQuestion(Question):
             else:
                 passed = passed and testResult
 
-        ## FIXME: Below terrible hack to match q3's logic
+        ## FIXME: Below terrible hack to match passo4's logic
         if int(points) == self.maxPoints and not passed:
             grades.assignZeroCredit()
         else:
             grades.addPoints(int(points))
 
 
-class Q6PartialCreditQuestion(Question):
+class Passo7PartialCreditQuestion(Question):
     """Fails any test which returns False, otherwise doesn't effect the grades object.
     Partial credit tests will add the required points."""
 
