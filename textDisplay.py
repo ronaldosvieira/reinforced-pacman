@@ -47,7 +47,7 @@ class NullGraphics:
 
 class PacmanGraphics:
     def __init__(self, speed=None):
-        if speed != None:
+        if speed is not None:
             global SLEEP_TIME
             SLEEP_TIME = speed
 

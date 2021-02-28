@@ -134,7 +134,7 @@ def loadModuleFile(moduleName, filePath):
 
 
 def readFile(path, root=""):
-    "Read file from disk at specified path and return as string"
+    """Read file from disk at specified path and return as string"""
     with open(os.path.join(root, path), 'r') as handle:
         return handle.read()
 
@@ -229,7 +229,7 @@ def getDepends(testParser, testRoot, question):
 # get list of questions to grade
 def getTestSubdirs(testParser, testRoot, questionToGrade):
     problemDict = testParser.TestParser(os.path.join(testRoot, 'CONFIG')).parse()
-    if questionToGrade != None:
+    if questionToGrade is not None:
         questions = getDepends(testParser, testRoot, questionToGrade)
         if len(questions) > 1:
             print 'Note: due to dependencies, the following tests will be run: %s' % ' '.join(questions)
@@ -297,7 +297,7 @@ def evaluate(generateSolutions, testRoot, moduleDict, exceptionMap=ERROR_HINT_MA
         questions.append((q, question.getMaxPoints()))
 
     grades = grading.Grades(projectParams.PROJECT_NAME, questions, edxOutput=edxOutput, muteOutput=muteOutput)
-    if questionToGrade == None:
+    if questionToGrade is None:
         for q in questionDicts:
             for prereq in questionDicts[q].get('depends', '').split():
                 grades.addPrereq(q, prereq)
@@ -343,9 +343,9 @@ if __name__ == '__main__':
     moduleDict['projectTestClasses'] = loadModuleFile(moduleName, os.path.join(options.codeRoot, options.testCaseCode))
 
 
-    if options.runTest != None:
+    if options.runTest is not None:
         runTest(options.runTest, moduleDict, printTestCase=options.printTestCase, display=getDisplay(True, options))
     else:
         evaluate(options.generateSolutions, options.testRoot, moduleDict,
-            edxOutput=options.edxOutput, muteOutput=options.muteOutput, printTestCase=options.printTestCase,
-            questionToGrade=options.gradeQuestion, display=getDisplay(options.gradeQuestion!=None, options))
+                 edxOutput=options.edxOutput, muteOutput=options.muteOutput, printTestCase=options.printTestCase,
+                 questionToGrade=options.gradeQuestion, display=getDisplay(options.gradeQuestion is not None, options))

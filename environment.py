@@ -12,7 +12,7 @@
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
 
 
-#!/usr/bin/python
+# !/usr/bin/python
 
 class Environment:
 

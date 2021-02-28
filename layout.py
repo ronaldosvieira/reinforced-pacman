@@ -49,7 +49,7 @@ class Layout:
             vis = Grid(self.width, self.height, {Directions.NORTH:set(), Directions.SOUTH:set(), Directions.EAST:set(), Directions.WEST:set(), Directions.STOP:set()})
             for x in range(self.width):
                 for y in range(self.height):
-                    if self.walls[x][y] == False:
+                    if not self.walls[x][y]:
                         for vec, direction in zip(vecs, dirs):
                             dx, dy = vec
                             nextx, nexty = x + dx, y + dy
@@ -71,7 +71,7 @@ class Layout:
         while self.isWall( (x, y) ):
             x = random.choice(range(self.width))
             y = random.choice(range(self.height))
-        return (x,y)
+        return x, y
 
     def getRandomCorner(self):
         poses = [(1,1), (1, self.height - 2), (self.width - 2, 1), (self.width - 2, self.height - 2)]
@@ -131,11 +131,11 @@ class Layout:
 def getLayout(name, back = 2):
     if name.endswith('.lay'):
         layout = tryToLoad('layouts/' + name)
-        if layout == None: layout = tryToLoad(name)
+        if layout is None: layout = tryToLoad(name)
     else:
         layout = tryToLoad('layouts/' + name + '.lay')
-        if layout == None: layout = tryToLoad(name + '.lay')
-    if layout == None and back >= 0:
+        if layout is None: layout = tryToLoad(name + '.lay')
+    if layout is None and back >= 0:
         curdir = os.path.abspath('.')
         os.chdir('..')
         layout = getLayout(name, back -1)
@@ -143,7 +143,7 @@ def getLayout(name, back = 2):
     return layout
 
 def tryToLoad(fullname):
-    if(not os.path.exists(fullname)): return None
+    if not os.path.exists(fullname): return None
     f = open(fullname)
     try: return Layout([line.strip() for line in f])
     finally: f.close()

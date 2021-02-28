@@ -39,7 +39,7 @@ class QLearningAgent(ReinforcementAgent):
           which returns legal actions for a state
     """
     def __init__(self, **args):
-        "You can initialize Q-values here..."
+        """You can initialize Q-values here..."""
         ReinforcementAgent.__init__(self, **args)
 
         "*** YOUR CODE HERE ***"
@@ -112,7 +112,7 @@ class QLearningAgent(ReinforcementAgent):
 
 
 class PacmanQAgent(QLearningAgent):
-    "Exactly the same as QLearningAgent, but with different default parameters"
+    """Exactly the same as QLearningAgent, but with different default parameters"""
 
     def __init__(self, epsilon=0.05,gamma=0.8,alpha=0.2, numTraining=0, **args):
         """
@@ -175,7 +175,7 @@ class ApproximateQAgent(PacmanQAgent):
         util.raiseNotDefined()
 
     def final(self, state):
-        "Called at the end of each game."
+        """Called at the end of each game."""
         # call the super-class final method
         PacmanQAgent.final(self, state)
 

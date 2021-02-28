@@ -81,7 +81,7 @@ class Configuration:
         self.direction = direction
 
     def getPosition(self):
-        return (self.pos)
+        return self.pos
 
     def getDirection(self):
         return self.direction
@@ -91,8 +91,8 @@ class Configuration:
         return x == int(x) and y == int(y)
 
     def __eq__(self, other):
-        if other == None: return False
-        return (self.pos == other.pos and self.direction == other.direction)
+        if other is None: return False
+        return self.pos == other.pos and self.direction == other.direction
 
     def __hash__(self):
         x = hash(self.pos)
@@ -137,7 +137,7 @@ class AgentState:
             return "Ghost: " + str( self.configuration )
 
     def __eq__( self, other ):
-        if other == None:
+        if other is None:
             return False
         return self.configuration == other.configuration and self.scaredTimer == other.scaredTimer
 
@@ -153,7 +153,7 @@ class AgentState:
         return state
 
     def getPosition(self):
-        if self.configuration == None: return None
+        if self.configuration is None: return None
         return self.configuration.getPosition()
 
     def getDirection(self):
@@ -189,7 +189,7 @@ class Grid:
         return '\n'.join([''.join(x) for x in out])
 
     def __eq__(self, other):
-        if other == None: return False
+        if other is None: return False
         return self.data == other.data
 
     def __hash__(self):
@@ -326,7 +326,7 @@ class Actions:
 
     def directionToVector(direction, speed = 1.0):
         dx, dy =  Actions._directions[direction]
-        return (dx * speed, dy * speed)
+        return dx * speed, dy * speed
     directionToVector = staticmethod(directionToVector)
 
     def getPossibleActions(config, walls):
@@ -335,7 +335,7 @@ class Actions:
         x_int, y_int = int(x + 0.5), int(y + 0.5)
 
         # In between grid points, all agents must continue straight
-        if (abs(x - x_int) + abs(y - y_int)  > Actions.TOLERANCE):
+        if abs(x - x_int) + abs(y - y_int)  > Actions.TOLERANCE:
             return [config.getDirection()]
 
         for dir, vec in Actions._directionsAsList:
@@ -365,7 +365,7 @@ class Actions:
     def getSuccessor(position, action):
         dx, dy = Actions.directionToVector(action)
         x, y = position
-        return (x + dx, y + dy)
+        return x + dx, y + dy
     getSuccessor = staticmethod(getSuccessor)
 
 class GameStateData:
@@ -376,7 +376,7 @@ class GameStateData:
         """
         Generates a new data packet by copying information from its predecessor.
         """
-        if prevState != None:
+        if prevState is not None:
             self.food = prevState.food.shallowCopy()
             self.capsules = prevState.capsules[:]
             self.agentStates = self.copyAgentStates( prevState.agentStates )
@@ -412,7 +412,7 @@ class GameStateData:
         """
         Allows two states to be compared.
         """
-        if other == None: return False
+        if other is None: return False
         # TODO Check for type of other
         if not self.agentStates == other.agentStates: return False
         if not self.food == other.food: return False
@@ -443,8 +443,8 @@ class GameStateData:
                 map[x][y] = self._foodWallStr(food[x][y], walls[x][y])
 
         for agentState in self.agentStates:
-            if agentState == None: continue
-            if agentState.configuration == None: continue
+            if agentState is None: continue
+            if agentState.configuration is None: continue
             x,y = [int( i ) for i in nearestPoint( agentState.configuration.pos )]
             agent_dir = agentState.configuration.direction
             if agentState.isPacman:
@@ -538,7 +538,7 @@ class Game:
             return self.rules.getProgress(self)
 
     def _agentCrash( self, agentIndex, quiet=False):
-        "Helper method for handling agent crashes"
+        """Helper method for handling agent crashes"""
         if not quiet: traceback.print_exc()
         self.gameOver = True
         self.agentCrashed = True
@@ -583,7 +583,7 @@ class Game:
                 self.unmute()
                 self._agentCrash(i, quiet=True)
                 return
-            if ("registerInitialState" in dir(agent)):
+            if "registerInitialState" in dir(agent):
                 self.mute(i)
                 if self.catchExceptions:
                     try:

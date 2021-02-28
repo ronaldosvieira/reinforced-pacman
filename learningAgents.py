@@ -169,7 +169,7 @@ class ReinforcementAgent(ValueEstimationAgent):
         gamma    - discount factor
         numTraining - number of training episodes, i.e. no learning after these many episodes
         """
-        if actionFn == None:
+        if actionFn is None:
             actionFn = lambda state: state.getLegalActions()
         self.actionFn = actionFn
         self.episodesSoFar = 0
@@ -216,7 +216,7 @@ class ReinforcementAgent(ValueEstimationAgent):
     def registerInitialState(self, state):
         self.startEpisode()
         if self.episodesSoFar == 0:
-            print 'Beginning %d episodes of Training' % (self.numTraining)
+            print 'Beginning %d episodes of Training' % self.numTraining
 
     def final(self, state):
         """

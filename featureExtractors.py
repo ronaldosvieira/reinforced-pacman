@@ -12,7 +12,7 @@
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
 
 
-"Feature extractors for Pacman game states"
+"""Feature extractors for Pacman game states"""
 
 from game import Directions, Actions
 import util

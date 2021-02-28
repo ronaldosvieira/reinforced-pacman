@@ -14,5 +14,5 @@
 
 STUDENT_CODE_DEFAULT = 'analysis.py,qlearningAgents.py,valueIterationAgents.py'
 PROJECT_TEST_CLASSES = 'reinforcementTestClasses.py'
-PROJECT_NAME = 'Project 3: Reinforcement learning'
+PROJECT_NAME = 'TP1: Processos de decisao de Markov'
 BONUS_PIC = False
