@@ -19,13 +19,13 @@
 # Set the given parameters to obtain the specified policies through
 # value iteration.
 
-def question2():
+def passo3():
     answerDiscount = 0.9
     answerNoise = 0.2
     return answerDiscount, answerNoise
 
 
-def question3a():
+def passo4a():
     answerDiscount = None
     answerNoise = None
     answerLivingReward = None
@@ -33,7 +33,7 @@ def question3a():
     # If not possible, return 'NOT POSSIBLE'
 
 
-def question3b():
+def passo4b():
     answerDiscount = None
     answerNoise = None
     answerLivingReward = None
@@ -41,7 +41,7 @@ def question3b():
     # If not possible, return 'NOT POSSIBLE'
 
 
-def question3c():
+def passo4c():
     answerDiscount = None
     answerNoise = None
     answerLivingReward = None
@@ -49,7 +49,7 @@ def question3c():
     # If not possible, return 'NOT POSSIBLE'
 
 
-def question3d():
+def passo4d():
     answerDiscount = None
     answerNoise = None
     answerLivingReward = None
@@ -57,7 +57,7 @@ def question3d():
     # If not possible, return 'NOT POSSIBLE'
 
 
-def question3e():
+def passo4e():
     answerDiscount = None
     answerNoise = None
     answerLivingReward = None
@@ -65,7 +65,7 @@ def question3e():
     # If not possible, return 'NOT POSSIBLE'
 
 
-def question6():
+def passo7():
     answerEpsilon = None
     answerLearningRate = None
     return answerEpsilon, answerLearningRate
@@ -76,6 +76,6 @@ if __name__ == '__main__':
     print 'Answers to analysis questions:'
     import analysis
 
-    for q in [q for q in dir(analysis) if q.startswith('question')]:
+    for q in [q for q in dir(analysis) if q.startswith('passo')]:
         response = getattr(analysis, q)()
         print '  Question %s:\t%s' % (q, str(response))

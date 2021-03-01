@@ -1,7 +1,7 @@
 class: "GridPolicyTest"
 
 # Function in module in analysis that returns (discount, noise)
-parameterFn: "question3e"
+parameterFn: "passo4e"
 
 # GridWorld specification
 #    _ is empty space
