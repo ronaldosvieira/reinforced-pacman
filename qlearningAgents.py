@@ -42,7 +42,7 @@ class QLearningAgent(ReinforcementAgent):
         """You can initialize Q-values here..."""
         ReinforcementAgent.__init__(self, **args)
 
-        "*** YOUR CODE HERE ***"
+        self.qValues = util.Counter()  # A Counter is a dict with default 0
 
     def getQValue(self, state, action):
         """
